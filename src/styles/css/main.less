@@ -1,0 +1,86 @@
+* {
+  padding: 0;
+  margin:  0;
+  font-family: sans-serif;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  //overflow: hidden;
+}
+
+
+@font-face {
+  font-family: sans-serif;
+  src: local('Meiryo UI');
+}
+
+@font-face {
+  font-family: monospace;
+  src: local('MS Gothic');
+}
+
+
+
+#app {
+  //overflow: hidden;
+  div.appbar{
+    position: fixed;
+    top:0;
+    left:0;
+    right:0;
+  }
+  div.content {
+    margin-top: 64px;
+    overflow-y: auto;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom:0;
+  }
+}
+
+// App -> ChannelList
+span.channel-info {
+  //background-color: red;
+  > div {
+    > div {
+      //background-color: grey;
+      padding-top: 8px !important;
+      padding-bottom: 8px !important;
+      // avatar
+      span {
+        font-size: 10pt;
+      }
+    }
+  }
+}
+
+
+// Setting ->
+div.program_info_page {
+  * {
+    //color: #F00 !important;
+  }
+}
+div.setting_tabs {
+  // tabpage
+  > div:last-child {
+    position: fixed;
+    overflow-y: auto;
+    top: 48px;
+    left: 0;
+    right: 0;
+    bottom:0;
+  }
+}
+
+
+div.btn-container {
+  padding: 16px 0;
+  > div {
+    margin-right: 16px;
+  }
+}

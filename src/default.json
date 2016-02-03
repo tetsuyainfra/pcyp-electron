@@ -1,0 +1,36 @@
+{
+  "yellow_pages": [
+    {
+      "name": "sp",
+      "url": "http://bayonet.ddo.jp/sp/index.txt"
+    },
+    {
+      "name": "tp",
+      "url": "http://temp.orz.hm/yp/index.txt"
+    }
+  ],
+  "peercast": {
+    "start_peca": true,
+    "exe_path": "c:/Program Files/PeerCast/peercast.exe",
+    "hostname": "localhost",
+    "port": "7144"
+  },
+  "player": {
+    "use_inner_player": false,
+    "user_players": [
+      {
+        "ext": "WMV",
+        "path": "D:/Programs/Peercast/PeerstPlayer/PeerstPlayer.exe",
+        "command": "<stream/> <type/> <channelname/> <contact/>"
+      },
+      {
+        "ext": "FLV",
+        "path": "D:/Programs/Peercast/PeerstPlayer/PeerstPlayer.exe",
+        "command": "<stream/> <type/> <channelname/> <contact/>"
+      }
+    ]
+  },
+  "favorite": {
+
+  }
+}

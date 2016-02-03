@@ -1,0 +1,14 @@
+{
+  "appenders": [
+    {
+      "type": "file",
+      "filename": "logs/pcyp-electron.log",
+      "maxLogSize": 20480,
+      "backups": 3,
+      "category": "default"
+    },
+    {
+      "type": "console"
+    }
+  ]
+}

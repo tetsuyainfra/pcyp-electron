@@ -1,0 +1,42 @@
+{
+  "name": "pcyp-electron",
+  "description": "PeerCast YellowPage viewer by electron",
+  "main": "index.js",
+  "authors": [
+    "tetsuyainfra"
+  ],
+  "license": "LGPL-2.1",
+  "keywords": [
+    "pcyp",
+    "peercast"
+  ],
+  "moduleType": [
+    "node"
+  ],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "font-awesome": "~4.5.0",
+    "fixed-data-table": "~0.6.0"
+  },
+  "overrides": {
+    "font-awesome": {
+      "main": [
+        "**/font-awesome.less",
+        "**/Font",
+        "**/*webfont*"
+      ]
+    },
+    "fixed-data-table": {
+      "main": [
+        "dist/fixed-data-table.css"
+      ]
+    }
+  }
+}

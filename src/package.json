@@ -1,5 +1,6 @@
 {
   "name"    : "pcyp-electron",
   "version" : "0.1.0",
-  "main"    : "app.js"
+  "main"    : "main.js",
+  "campany_name": "produced_by_tetsuyainfra"
 }
