@@ -75,6 +75,7 @@
     "react-dom": "^0.14.5",
     "react-tap-event-plugin": "^0.2.1",
     "request": "^2.67.0",
+    "wcjs-prebuilt": "tetsuyainfra/wcjs-prebuilt#add_vlc_plugin_path",
     "yargs": "^3.31.0"
   },
   "private": true
