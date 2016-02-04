@@ -75,6 +75,7 @@
     "react-dom": "^0.14.5",
     "react-tap-event-plugin": "^0.2.1",
     "request": "^2.67.0",
+    "wcjs-prebuilt": "tetsuyainfra/wcjs-prebuilt#add_plugin_path",
     "webgl-video-renderer": "^0.2.0",
     "yargs": "^3.31.0"
   },
