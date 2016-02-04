@@ -1,17 +1,15 @@
 gulp = require('gulp')
 $    = require('gulp-load-plugins')()
-del  = require('del')
-bower= require('main-bower-files')
 
-env  = require('../env')
 config = require('../config')
-debug = require('../debug')
-{wrapPlumber} = require('../utils/wrapPlumber.coffee')
+{ wrapPlumber, nameLogger } = require('../utils')
 
+gulp.task 'doc:generate', ['clean:doc'], ->
+  stream = gulp.src(config.doc.src)
+  if config.isWatching
+    stream = stream.pipe $.watch(config.doc.src)
 
-
-gulp.task 'doc', ->
-  gulp.src config.doc.src
+  stream.pipe nameLogger()
   .pipe wrapPlumber()
   .pipe $.markdown()
   .pipe gulp.dest(config.doc.dest)

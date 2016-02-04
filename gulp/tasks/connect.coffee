@@ -3,7 +3,6 @@ $    = require('gulp-load-plugins')()
 
 env  = require('../env')
 config = require('../config')
-debug = require('../debug')
 moment = require('moment')
 
 gulp.task 'connect', ->
