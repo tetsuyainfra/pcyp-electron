@@ -20,7 +20,7 @@ src = {
   root    : "./src"
   resource: "./src/**/*.json",
   jade    : "./src/**/*.jade",
-  coffee  : "./src/**/*.coffee",
+  coffee  : ["./src/**/*.coffee", "!./src/renderer/**/*.coffee"]
   jsx     : "./src/**/*.jsx",
   less    : "./src/**/*.less",
 }
@@ -40,11 +40,11 @@ browserify = {
       dest   : "#{APP}/renderer/component",
       outputName: "setting.js",
     }
-    # {
-    #   entries: "#{SRC}/renderer/component/player.coffee",
-    #   dest   : "#{APP}/renderer/component",
-    #   outputName: "player.js",
-    # }
+    {
+      entries: "#{SRC}/renderer/component/player.coffee",
+      dest   : "#{APP}/renderer/component",
+      outputName: "player.js",
+    }
   ],
   #debugExternal : ['react', 'react-dom', 'react-tap-event-plugin', 'material-ui', 'remote', 'flux']
 }
