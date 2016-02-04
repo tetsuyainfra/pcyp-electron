@@ -63,7 +63,7 @@
   },
   "dependencies": {
     "cross-spawn": "^2.1.5",
-    "electron-prebuilt": "0.36.5",
+    "electron-prebuilt": "^0.36.5",
     "fixed-data-table": "^0.6.0",
     "flux": "^2.1.1",
     "keymirror": "^0.1.1",
@@ -75,8 +75,15 @@
     "react-dom": "^0.14.5",
     "react-tap-event-plugin": "^0.2.1",
     "request": "^2.67.0",
-    "wcjs-prebuilt": "tetsuyainfra/wcjs-prebuilt#add_vlc_plugin_path",
+    "webgl-video-renderer": "^0.2.0",
     "yargs": "^3.31.0"
+  },
+  "wcjs-prebuilt": {
+    "platform": "win",
+    "version": "latest",
+    "runtime": "electron",
+    "runtime_arch": "ia32",
+    "runtime_version": "latest"
   },
   "private": true
 }

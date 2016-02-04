@@ -1,3 +1,5 @@
+process.env.VLC_PLUGIN_PATH = require('wcjs-prebuilt').vlc_plugin_path
+
 electron      = require('electron')  # Module to control application life.
 app           = electron.app
 BrowserWindow = electron.BrowserWindow
@@ -27,6 +29,7 @@ class PcypApplication
     {@devMode} = props
     @_mainWindow = null
     @_configWindow = null
+    @_playerWindows = []
     @config     = PcypConfig.loadConfig(props)
     @.start()
 
@@ -85,11 +88,23 @@ class PcypApplication
         when ActionTypes.PLAY_CHANNEL
           logger.trace "PLAY_CHANNEL"
           logger.trace action.data
-          peercast = @config.peercast
-          ch = action.data
-          spawn_args = getArgs(@config, ch)
-          logger.trace 'getargs', spawn_args
-          child = spawn(spawn_args[0], spawn_args[1])
+          spawn_args = getArgs(@config, action.data)
+          if @config.player.use_inner_player
+            win = new BrowserWindow(
+              width: 320, height: 240
+              x: 0, y: 0
+            )
+            win.on 'closed', =>
+              logger.trace "mainWindow closed pid: #{process.pid}"
+              @_playerWindows.filter((w) ->
+                return w is this
+              , this)
+            enc_url = encodeURIComponent(spawn_args[1][0])
+            win.loadURL("file://#{__dirname}/renderer/player.html?url=#{enc_url}")
+            @_playerWindows.push(win)
+          else
+            logger.trace 'getargs', spawn_args
+            child = spawn(spawn_args[0], spawn_args[1])
         else
           logger.trace "action.type: UNKWON"
     ) # async events
@@ -104,7 +119,7 @@ class PcypApplication
   create_main_window: () ->
     logger.trace 'PcypWindow.create_main_window'
     @_mainWindow = new BrowserWindow(
-      width: 600, height: 800
+      width: 480, height: 800
       x: 0, y: 0
     )
     @_mainWindow.on 'closed', =>

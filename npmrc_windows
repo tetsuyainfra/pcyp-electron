@@ -1,12 +1,2 @@
 # for electron
 arch=ia32
-
-
-# for wcjs-prebuilt(WebChemera.js)
-# https://github.com/RSATom/WebChimera.js/releases/tag/v0.1.48
-wcjs_platform=win
-wcjs_arch=ia32
-wcjs_version=v0.1.48
-wcjs_runtime=electron
-wcjs_runtime_version=0.36.2
-#wcjs_target=./bin
