@@ -20,7 +20,11 @@ src = {
   root    : "./src"
   resource: "./src/**/*.json",
   jade    : "./src/**/*.jade",
-  coffee  : ["./src/**/*.coffee", "!./src/renderer/**/*.coffee"]
+  #coffee  : ["./src/**/*.coffee", "!./src/renderer/**/*.coffee"]
+  #coffee  : ["./src/**/*.coffee"]
+  coffee  : ["./src/**/*.coffee",
+   "!./src/renderer/player/player.coffee"
+  ]
   jsx     : "./src/**/*.jsx",
   less    : "./src/**/*.less",
 }
@@ -41,8 +45,8 @@ browserify = {
       outputName: "setting.js",
     }
     {
-      entries: "#{SRC}/renderer/component/player.coffee",
-      dest   : "#{APP}/renderer/component",
+      entries: "#{SRC}/renderer/player/player.coffee",
+      dest   : "#{APP}/renderer/player",
       outputName: "player.js",
     }
   ],
@@ -54,12 +58,22 @@ doc = {
   dest: "./doc/html"
 }
 
-dev = {
+test = {
+  target: ["./src/**/*.test.coffee"]
+  jasmine : {
+    require: ['./spec/helper.coffee']
+  }
+}
+
+connect = {
   browser: [
-    "./app/app.js"
+    "./app/**/*.js"
+    "!./app/renderer/**/*.*"
+    "!./app/player/**/*.*"
   ],
   renderer: [
-    "./app/renderer/**/*.{html,js}"
+    "./app/renderer/component/*.{html,js}"
+    "./app/renderer/player/*.{html,js}"
   ]
 }
 
@@ -76,7 +90,8 @@ module.exports = {
   app : app
   src : src
   doc : doc
-  dev : dev
+  test : test
+  connect: connect
   packageJson: packageJson
   browserify: browserify
 }

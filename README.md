@@ -8,7 +8,7 @@ Peercast Yellow Pageを表示するためのクライアントです。
 ## 動作イメージ
 ![起動直後](https://raw.githubusercontent.com/tetsuyainfra/pcyp-electron/master/doc/images/pcyp-electron-startup.png)
 
-## How to development
+## How to development on win32
 ```cmd
 copy npmrc_windows .npmrc
 edit .npmrc       # たぶん何もする必要ないです
@@ -35,13 +35,30 @@ Note: src内のファイルを書き換えたら自動でコンパイルしま�
 面倒なのでしばらくは32bitオンリーで開発していきます。
 
 
+## ソースコード
+基本的にはCoffeeScriptで書きます。そのうちTypeScriptに移行します。
+
+
+## テスト
+- 単体テストはNOブラウザで動作
+- 結合テストは・・・どうしよう？
+
+
 ## ライセンスについて・・・
-依存ライブラリについて調べてる途中なのでLGPL-2.1にしておきます。
+依存ライブラリについて調べてる途中なのでVLCのライセンスであるLGPL-2.1にしておきます。
 後ほど変更する可能性があります。（可能ならばMITにしたい）
 
+## TODO
+- 内臓プレイヤー完成させる
+- NativeModule対応
+　- packagingでffiをどうする？
+
+## 既知のバグ(という名の仕様)
+- ドラッグアンドドロップでウィンドウを早く動かすとウィンドウ追従が外れる
+- ウィンドウを最大化するとHTML,body要素のCSS:height,widthプロパティが4pxされる
+  - https://github.com/atom/electron/issues/2498
 
 ## 仕様ライブラリなど(予定含む)
 - React / Flux
 - WebChemera.js (の予定)
-- WebGLライブラリの何か
-
+- Three.js

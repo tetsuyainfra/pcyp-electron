@@ -33,12 +33,18 @@ html, body {
   }
   div.content {
     margin-top: 64px;
-    overflow-y: auto;
+    //overflow-y: auto;
+    overflow-y: hidden;
+    padding-right: 17px; // scrollbar width
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom:0;
+    &:hover {
+      padding-right: 0px;
+      overflow-y: scroll;
+    }
   }
 }
 

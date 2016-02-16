@@ -26,7 +26,7 @@ gulp.task 'browserify', ['clean:compile'],  (cb)->
       cache: {}, packageCache: {}, fullPaths: false,
       entries: bundleConfig.entries,
       extensions: config.extensions,
-      debug: config.debug,
+      #debug: config.debug, # include sourcemap
       bundleExternal: ! config.debug
     })
 

@@ -5,23 +5,23 @@ app           = electron.app
 BrowserWindow = electron.BrowserWindow
 crashReporter = electron.crashReporter
 ipcMain       = electron.ipcMain
+spawn         = require 'cross-spawn'
 
-client        = require('electron-connect').client # to debug
-
+logger        = require('./util/logger')
 AppStore      = require('./stores/app-store')
 ChannelStore  = require('./stores/channel-store')
-logger        = require('./util/logger')
 
 {ActionTypes} = require './constants/app-constants'
 {getYp, getYPs} = require './util/yp-utils'
 {getArgs}     = require './util/external-player'
 PcypConfig    = require './util/pcyp-config'
+win32api     = require './util/win32api'
 
-spawn         = require 'cross-spawn'
-
-logger.info "process.argv: ",      process.argv
-logger.info "process.arch: ",      process.arch
-logger.info "process.versions: ",  process.versions
+try
+  if process.env.NODE_ENV == "development"
+    connect_client = require('electron-connect').client
+catch e
+  logger.warning "can't require electron-connect client"
 
 class PcypApplication
   constructor: (props) ->
@@ -46,6 +46,12 @@ class PcypApplication
 
     app.on 'ready', () =>
       @.create_main_window()
+
+      if connect_client?
+        connect_client.create().socket.on('error', (err) ->
+          logger.error "electron-connect CONNECTION ERROR", err
+        )
+
 
     # async events
     ipcMain.on ActionTypes.IPC_EVENT, ((event, action) =>
@@ -91,17 +97,30 @@ class PcypApplication
           spawn_args = getArgs(@config, action.data)
           if @config.player.use_inner_player
             win = new BrowserWindow(
-              width: 320, height: 240
-              x: 0, y: 0
+              #useContentSize: true
+              # border-width = 5px
+              width: 330, height: 250
+              x: 100, y: 100
+              frame: false
+              show: false
+              #fullscreen: true
             )
             win.on 'closed', =>
-              logger.trace "mainWindow closed pid: #{process.pid}"
+              logger.trace "playerWindow closed pid: #{process.pid}"
+              logger.trace "win :", win
               @_playerWindows.filter((w) ->
-                return w is this
-              , this)
+                # logger.trace "filter win.id: ", win.id
+                # logger.trace "filter   w.id: ",   w.id
+                return w is win
+               )
+              logger.trace '@_playerWindows.length:', @_playerWindows.length
+            win.on 'enter-full-screen', =>
+              logger.trace "playerWindow enter fullscreen pid: #{process.pid}"
             enc_url = encodeURIComponent(spawn_args[1][0])
             win.loadURL("file://#{__dirname}/renderer/player.html?url=#{enc_url}")
             @_playerWindows.push(win)
+            logger.trace 'win.id:', win.id
+            logger.trace '@_playerWindows.length:', @_playerWindows.length
           else
             logger.trace 'getargs', spawn_args
             child = spawn(spawn_args[0], spawn_args[1])
@@ -148,9 +167,14 @@ class PcypApplication
     @_configWindow.loadURL("file://#{__dirname}/renderer/setting.html")
     callback()
 
-
 module.exports =
   start: (argv)->
+    logger.info "process.argv:",        process.argv
+    logger.info "process.arch:",        process.arch
+    logger.info "process.versions:",    process.versions
+    logger.info "PcypApp.start(argv):", argv
+
+
     #new PcypApp(argv)
     new PcypApplication(argv)
 

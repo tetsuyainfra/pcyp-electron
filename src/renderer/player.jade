@@ -3,10 +3,70 @@ html
   head
     meta(charset='utf-8')
     link(rel='stylesheet', href="../styles/css/vendor.css")
-    link(rel='stylesheet', href="../styles/css/main.css")
-    script(type='text/javascript', src="../styles/js/vendor.js")
+    link(rel='stylesheet', href="../styles/css/player.css")
+    script#vertexShader(type="x-shader/x-vertex").
+      varying vec2 vUV; // fragmentShaderに渡すテクスチャ座標
+      void main() {
+        vUV  = uv; // テクスチャ座標をそのまま渡す
+        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);    // 変換：ローカル座標 → 配置 → カメラ座標
+        // output
+        gl_Position = projectionMatrix * mvPosition;                // 変換：カメラ座標 → 画面座標
+      }
+    script#fragmentShader(type="x-shader/x-fragment").
+      varying vec2 vUV;           // vertexShaderで処理されて渡されるテクスチャ座標
+      uniform vec2 u_resolution;  // uniform@画面解像度
+      uniform sampler2D u_texture;  // uniform@画面解像度
+      uniform sampler2D u_texY;  // uniform@画面解像度
+      uniform sampler2D u_texU;  // uniform@画面解像度
+      uniform sampler2D u_texV;  // uniform@画面解像度
+      void main() {
+          //vec2 st     = gl_FragCoord.xy/u_resolution.xy;
+          //gl_FragColor= vec4(st.x,st.y,0.0, 1.0); // rgba
+          float r,g,b,y,u,v;
+          y=texture2D(u_texY, vUV).a;
+          u=texture2D(u_texU, vUV).a;
+          v=texture2D(u_texV, vUV).a;
+
+          y=1.1643*(y-0.0625);
+          u=u-0.5;
+          v=v-0.5;
+
+          r=y+1.5958*v;
+          g=y-0.39173*u-0.81290*v;
+          b=y+2.017*u;
+
+          gl_FragColor = vec4(r,g,b,1.0);
+          //r = texture2D(u_texture, vUV).a;
+          //r = texture2D(u_texV, vUV).a;
+          //gl_FragColor= vec4(r, 0.0,0.0, 1.0);
+          //gl_FragColor= texture2D(u_texture, vUV);
+      }
     title player-electron
   body
-    //canvas#canvas
-    //div#debug
-    script(type="text/javascript", src="component/player.js")
+    div#contents.fullheight
+      div#contents-inner.fullheight
+        div#header
+          div.inner
+            button.min  m 
+            button.max(onclick="requestFullScreen()") フルスクリーン切替 
+            button.close(onclick="(function(){window.close();})();")    ×
+        canvas#player_container
+        div#footer
+          div.inner
+            span          footer
+            span#debug    debug
+    script(type="text/javascript", src="player/player.js")
+    script(type="text/javascript").
+      var win = require("electron").remote.getCurrentWindow();
+      win.show();
+      // FullScreenイベント
+      var isFullScreen = false;
+      function requestFullScreen(){
+        if (isFullScreen){
+          document.webkitCancelFullScreen();
+          isFullScreen = false;
+        }else{
+          isFullScreen = true;
+          document.getElementById('contents').webkitRequestFullscreen();
+        }
+      }

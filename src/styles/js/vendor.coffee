@@ -3,7 +3,10 @@ if process.env.NODE_ENV == 'development'
   console.log('[mode is development]')
   global.DEBUG = true
   try
-    require('electron-connect').client.create(sendBounds: false)
+    global.connect = require('electron-connect').client.create(sendBounds: false)
+    # global.connect.on('RELOAD_APP', (opt) ->
+    #   console.log('RELOAD_APP', opt)
+    # )
   catch error
     console.log "can't create electron-connect.client"
     console.log error
