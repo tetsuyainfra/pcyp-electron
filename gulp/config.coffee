@@ -18,7 +18,7 @@ BUILD = "#{ROOT}/build/Release" # 配布packageの保存場所
 app = "./app"
 src = {
   root    : "./src"
-  resource: "./src/**/*.json",
+  resource: "./src/**/*.{json,png,jpeg}",
   jade    : "./src/**/*.jade",
   #coffee  : ["./src/**/*.coffee", "!./src/renderer/**/*.coffee"]
   #coffee  : ["./src/**/*.coffee"]

@@ -7,7 +7,7 @@ html
     script#vertexShader(type="x-shader/x-vertex").
       varying vec2 vUV; // fragmentShaderに渡すテクスチャ座標
       void main() {
-        vUV  = uv; // テクスチャ座標をそのまま渡す
+        vUV  = vec2(uv.x, 1.0-uv.y); // テクスチャ座標はy軸を反対にする
         vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);    // 変換：ローカル座標 → 配置 → カメラ座標
         // output
         gl_Position = projectionMatrix * mvPosition;                // 変換：カメラ座標 → 画面座標
@@ -15,13 +15,10 @@ html
     script#fragmentShader(type="x-shader/x-fragment").
       varying vec2 vUV;           // vertexShaderで処理されて渡されるテクスチャ座標
       uniform vec2 u_resolution;  // uniform@画面解像度
-      uniform sampler2D u_texture;  // uniform@画面解像度
       uniform sampler2D u_texY;  // uniform@画面解像度
       uniform sampler2D u_texU;  // uniform@画面解像度
       uniform sampler2D u_texV;  // uniform@画面解像度
       void main() {
-          //vec2 st     = gl_FragCoord.xy/u_resolution.xy;
-          //gl_FragColor= vec4(st.x,st.y,0.0, 1.0); // rgba
           float r,g,b,y,u,v;
           y=texture2D(u_texY, vUV).a;
           u=texture2D(u_texU, vUV).a;
@@ -36,10 +33,6 @@ html
           b=y+2.017*u;
 
           gl_FragColor = vec4(r,g,b,1.0);
-          //r = texture2D(u_texture, vUV).a;
-          //r = texture2D(u_texV, vUV).a;
-          //gl_FragColor= vec4(r, 0.0,0.0, 1.0);
-          //gl_FragColor= texture2D(u_texture, vUV);
       }
     title player-electron
   body

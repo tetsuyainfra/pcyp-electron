@@ -11,11 +11,24 @@ _resizing  <-- Window操作
 _resized   <-- Canvasリサイズ後の操作
 ###
 
+
+###
+Aspect比の考え方
+WindowWidth : WindowHeight
+TextureWidth: TextureHeight
+Width:Height                = MovieAspectRate
+
+textureサイズは常に1:1にする？ -> windowSize計算
+
+
+
+###
+
 ##
 # Playerを管理するクラス
 #
 class PlayerManager extends EventEmitter
-  constructor: (props) ->
+  constructor: (props={}) ->
     super()
     {
       @width = 320,
@@ -48,13 +61,36 @@ class PlayerManager extends EventEmitter
   _resized: () ->
     p = @container.parentElement
     @width = p.clientWidth; @height = p.clientHeight
-    @renderer.setSize(@width, @height, false)
-    console.log "_resized(#{@width}, #{@height})"
+    # renderer
+    @renderer.setSize(@width, @height)
+    # cam
+    # @camera.left  = -@width/2.0
+    # @camera.right =  @width/2.0
+    # @camera.top   =  @height/2.0
+    # @camera.bottom= -@height/2.0
+    # @camera.updateProjectionMatrix()
+    dar = @width/@height
+    if @players[0]?
+      fW = @players[0].width; fH = @players[0].height
+      far = fW / fH
+      console.log('dar', dar)
+      if dar < far
+        # 表示画面は縦長
+        #console.log('dar/far', dar/far)
+        @mesh.scale.set(1, dar/far, 1)
+      else
+        # 表示画面は横長
+        #console.log('far/dar', far/dar)
+        @mesh.scale.set(far/dar, 1, 1)
+
+      #console.log "_resized(#{@width}, #{@height})"
     delete @_resize_handle
 
   ## windowがフルスクリーンになった後に呼ばれる関数
   _fullscreened: () ->
-    console.log('_fullscreened:')
+    # borderを消すのが遅れることがあるので、fullscreen後に再度呼ぶ
+    @_resized()
+    return true
 
 
   initWindowEvent: () ->
@@ -70,6 +106,9 @@ class PlayerManager extends EventEmitter
       #   @.emit('resized')
       # , 100)
     ,false)
+    document.addEventListener('webkitfullscreenchange', (e) =>
+      @_fullscreened()
+    )
 
   initMouseEvent: () ->
     # console.log 'initMouseEvent'
@@ -78,12 +117,12 @@ class PlayerManager extends EventEmitter
     dragging   = false
     drag_start = null
     e.addEventListener('mousedown', (evt) ->
-      console.log('MouseDown:', evt.x, evt.y, evt, drag_start);
+      #console.log('MouseDown:', evt.x, evt.y, evt, drag_start);
       dragging = true;
       drag_start = require('electron').screen.getCursorScreenPoint()
     , false)
     e.addEventListener('mouseup', (evt)->
-      console.log('MouseUp:', evt.x, evt.y);
+      #console.log('MouseUp:', evt.x, evt.y);
       dragging = false;
     , false)
     e.addEventListener('mousemove', (evt) ->
@@ -111,7 +150,7 @@ class PlayerManager extends EventEmitter
     , false)
 
     e.addEventListener('dblclick', (evt) ->
-      console.log('DoubleClick')
+      #console.log('DoubleClick')
       requestFullScreen()
     , false)
 
@@ -119,7 +158,7 @@ class PlayerManager extends EventEmitter
   initKeyBoardEvent: () ->
     #e = @container
     document.addEventListener('keydown', (evt) =>
-      console.log('keydown:', evt, evt.which, evt.keyCode)
+      #console.log('keydown:', evt, evt.which, evt.keyCode)
       key = evt.keyCode || evt.which
       switch key
         when KeyCode.K_0
@@ -130,6 +169,8 @@ class PlayerManager extends EventEmitter
           @setSize(800, 600)
         when KeyCode.K_Q # 1
           @players[0].stop()
+        when KeyCode.K_P # 1
+          @players[0].play()
         else
           #console.log('default')
     , false)
@@ -137,23 +178,24 @@ class PlayerManager extends EventEmitter
   #
   initRenderer: () ->
     # console.log 'initRenderer'
-    #@renderer.setClearColor( new THREE.Color(0xffffff), 0.3) #背景色
+    @renderer.setClearColor( new THREE.Color(0x00ffff), 0.3) #背景色
     @scene = new THREE.Scene();
 
-    @camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
-    #@camera.position.y = 100;
-    @camera.position.z = 500;
-
-    @camera = new THREE.OrthographicCamera( @width/-2.0, @width/2.0, @height/2.0, -@height/2.0, 1, 1000 )
+    #@camera = new THREE.OrthographicCamera( @width/-2.0, @width/2.0, @height/2.0, -@height/2.0, 1, 1000 )
+    @camera = new THREE.OrthographicCamera( -0.5, 0.5, 0.5, -0.5, 1, 1000)
     #@camera.up.set(0,1,0)
-    @camera.position.set(0,0,500)
+    @camera.position.set(0,0,1000)
     #@camera.lookAt({x:0, y:0, z:0})
 
     @camera.updateProjectionMatrix()
     #console.log('camera: ', @camera)
 
-    #@geometry = new THREE.BoxGeometry( 200, 200, 200 )
-    @geometry = new THREE.PlaneGeometry( 100, 100, 1, 1 )
+    #@geometry = new THREE.BoxGeometry( 1, 1, 200 )
+    #@geometry = new THREE.PlaneGeometry( 100, 1, 1, 1 )
+    scale = 1
+    aspect = 4/3
+    scale = scale * aspect
+    @geometry = new THREE.PlaneGeometry( 1, 1)
     # @geometry.vertices[0].z = 75
     # @geometry.vertices[1].z = 25
     # @geometry.vertices[2].z = 50
@@ -179,6 +221,7 @@ class PlayerManager extends EventEmitter
 
 
     @mesh = new THREE.Mesh( @geometry, @material );
+    @mesh.matrixAutoUpdate = true
 
     @scene.add( @mesh );
 
@@ -192,6 +235,8 @@ class PlayerManager extends EventEmitter
     @_resized()
 
   animate: ()->
+    requestAnimationFrame(@animate.bind(this))
+
     @stats.begin()
 
     @count = 0 if @count > 1.0
@@ -204,17 +249,51 @@ class PlayerManager extends EventEmitter
       @uniforms.u_texY.value = textures.y
       @uniforms.u_texU.value = textures.u
       @uniforms.u_texV.value = textures.v
+      # aspect ration setting
+      # dW = @width; dH = @height
+      # dar = @width/@height
+      # console.log "display(#{dW}, #{dH}) : #{dar}"
+      #
+      # fW = @players[0].width; fH = @players[0].height
+      # far = fW / fH
+      # console.log "frame(#{fW}, #{fH}) : #{far}"
+      # console.log('dar, far', dar, far)
+      # if dar < 1.0
+      #   # 表示画面は縦長
+      #   # darの比率になっているピクセル比を1:1にする
+      #   #@mesh.scale.set(1/dar, 1, 1)
+      #
+      #   # 1:1の表示になった画面を元動画の比率にする
+      #   #@mesh.scale.set(1/dar*far, 1, 1)
+      #
+      #   # 大きさを横幅ベースに変える
+      #   #@mesh.scale.set(dar/dar*far, dar, 1)
+      #   console.log('dar/far', dar/far)
+      #   @mesh.scale.set(1, dar/far, 1)
+      # else
+      #   # 表示画面は横長
+      #   console.log('表示画面は横長')
+      #   console.log('far/dar', far/dar)
+      #   #@mesh.scale.set(1/dar, 1, 1)
+      #   #@mesh.scale.set(1/dar*far, 1, 1)
+      #   # width, height
+      #   @mesh.scale.set(far/dar, 1, 1)
+      # 同じ値なら何もしない
 
+      #@mesh.scale.set()
+
+    #console.log(@mesh.scale)
+    #@mesh.scale.set(0.5, 1, 0)
     #@mesh.rotation.x += 0.02
     #@mesh.rotation.y += 0.02
 
+    @renderer.clear()
     @renderer.render(@scene, @camera)
 
     @count += 0.004
 
     @stats.end()
 
-    requestAnimationFrame(@animate.bind(this))
 
 module.exports = PlayerManager
 
