@@ -2,6 +2,7 @@
 #  Webpack config( Base )
 #--------------------------------------------------
 webpack = require('webpack')
+path    = require('path')
 
 {src, app} = require('./gulp/config')
 env = require('./gulp/env')
@@ -20,6 +21,7 @@ webpackConfig = {
         'electron'
         'yargs'
         'isomorphic-fetch'
+        'log4js'
       ]
     )
     new webpack.ProvidePlugin({
@@ -31,11 +33,15 @@ webpackConfig = {
   # debug setting
   debug: true
   #devtool: 'eval'
-  devtool: 'cheap-module-eval-source-map' # dev向け
-  #devtool: 'source-map' # production向け
+  #devtool: 'cheap-module-eval-source-map' # dev向け
+  devtool: 'source-map' # production向け
 
   resolve: {
     extensions: ['', '.js', '.es6', '.jsx', '.coffee']
+    root: [
+      path.resolve("#{src}")
+    ]
+    #moduleDirectories: []
   }
   module: {
     preLoaders: [

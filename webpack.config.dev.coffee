@@ -8,7 +8,7 @@ config = _.merge({}, base, {
   target: "electron"
   entry:
     app: "#{src}/main.coffee"
-    "browser/pcyp": "#{src}/browser/pcyp.es6"
+    "browser/main": "#{src}/browser/main.es6"
     "browser/commons": ["react", "react-dom"]
   output: {
     path:           "#{app}"

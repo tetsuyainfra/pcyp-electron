@@ -7,8 +7,8 @@ base          = require('./webpack.config.base')
 config = _.merge({}, base, {
   target: "electron"
   entry:
-    app: "#{src}/main.coffee"
-    "browser/pcyp": "#{src}/browser/pcyp.es6"
+    app:            "#{src}/main.coffee"
+    "browser/main": "#{src}/browser/main.es6"
   output: {
     path:           "#{app}"
     filename:       '[name].js'

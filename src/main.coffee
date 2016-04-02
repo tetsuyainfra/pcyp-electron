@@ -3,7 +3,7 @@
 #--------------------------------------------------
 
 yargs         = require('yargs')
-fetch         = require('isomorphic-fetch')
+logger        = require('commons/logger')
 
 parseCommandLine = ->
   version = PcypApp.version
