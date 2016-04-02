@@ -9,28 +9,19 @@ env = require('./gulp/env')
 # config for webpack
 webpackConfig = {
   target: "electron"
-  # entry:
-  #   app: "#{src}/main.coffee"
-  # output: {
-  #   path:           "#{app}"
-  #   filename:       '[name].js'
-  # }
-  output: {
-
-  }
-  externals: [
-    {
-      electron: true
-      yargs: true
-    }
-  ]
   plugins: [
     new webpack.DefinePlugin({
       REVISION:      JSON.stringify(env.revision)
       DEBUG:        ! env.isProduction,
       PRODUCTION:   env.isProduction,
     })
-    new webpack.ExternalsPlugin('commonjs', ['electron','yargs'])
+    new webpack.ExternalsPlugin('commonjs',
+      [
+        'electron'
+        'yargs'
+        'isomorphic-fetch'
+      ]
+    )
     new webpack.ProvidePlugin({
       React:    'react'
       ReactDOM: 'react-dom'
