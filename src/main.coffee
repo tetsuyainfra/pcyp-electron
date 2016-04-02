@@ -1,5 +1,3 @@
-
-
 yargs         = require('yargs')
 PcypApp       = require('./pcyp-app')
 
@@ -8,13 +6,20 @@ parseCommandLine = ->
   options = yargs(process.argv[1..]).wrap(100)
   options.usage """
     pcyp-electron v#{version}
-    Usage: pcyp-electron [options]
+    Usage:
+      pcyp-electron [options]
 
-    Environment Variables:
-      -d --dev : debug mode
+    Player mode Usage(testing):
+      pcyp-electron -p [http://URL_HERE/ | file://localhost/c:/hogehoge.mp4]
   """
+  options.count('verbose').alias('v', 'verbose')
+  .describe('v', 'VERBOSE LEVEL -v warn, -vv info, -vvv debug, -vvvv trace')
 
-  options.alias('d', 'dev').boolean('d').describe('d', 'Run in development mode')
+  options.alias('d', 'dev').boolean('d')
+  .describe('d', 'Run in development mode')
+
+  options.alias('P', 'play').string('P')
+  .describe('P', 'Run in Test Player mode')
   args = options.argv
 
   if args.help
@@ -31,6 +36,5 @@ parseCommandLine = ->
   {devMode}
 
 argv = parseCommandLine()
-
 
 pcyp_app = PcypApp.start(argv)

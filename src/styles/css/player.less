@@ -1,0 +1,102 @@
+* {
+  font-family: sans-serif;
+  box-sizing: border-box;
+}
+
+// height: n% は包含ブロック(直近の親ブロック要素)の高さに対する割合で指定する
+// html > body > container が 100%ならwindowの高さになるはず・・・
+html, body {
+  width:  100%;
+  height: 100%;
+  padding: 0;
+  margin:  0;
+}
+
+body {
+  background-color: grey;
+  -webkit-user-select: none;
+  position: relative;
+}
+
+.fullheight {
+  height: 100%;
+}
+
+div#contents {
+  background-color: #333;
+  overflow: hidden;
+  width: 100%;
+  border: solid 5px grey;
+
+  #contents-inner {
+    position: relative;
+  }
+  &:-webkit-full-screen {
+    border: none;
+  }
+}
+
+// -- 以下 div#contents-inner内包要素 --
+canvas#player_container {
+    //#background: white;
+    background-image: url('./images/mono.png');
+    display: block;
+    //width: 100%;
+    //height: 100%;
+}
+
+div#header {
+  //background-color: red;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  -webkit-app-region:  drag;
+
+  .inner {
+    background-color: green;
+    height: 24px;
+    margin: 0px 0px;
+    padding: 4px 4px;
+    opacity: 0.0;
+    //
+    button.min {
+      -webkit-app-region: no-drag;
+    }
+    button.max {
+      -webkit-app-region: no-drag;
+    }
+    button.close {
+      -webkit-app-region: no-drag;
+    }
+  }
+
+  &:hover .inner{
+    opacity: 0.8;
+  }
+}
+
+div#footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  .inner {
+    background-color: green;
+    height: 24px;
+    margin: 0px 8px;
+    opacity: 0;
+  }
+
+  &:hover .inner{
+    opacity: 0.8;
+  }
+}
+
+// MEMO:
+//! CSSだけでアスペクト比を固定するテク
+// http://qiita.com/ryounagaoka/items/a98f59347ed758743b8d
+
+// https://gist.github.com/zachstronaut/1184900

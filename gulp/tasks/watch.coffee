@@ -1,34 +1,28 @@
 gulp = require('gulp')
 $    = require('gulp-load-plugins')()
-del  = require('del')
+gutil    = require('gulp-util')
 
-env  = require('../env')
 config = require('../config')
+gulp.task 'watch:set_watch', (cb)->
+  config.isWatching = true
+  gutil.log('config.isWatching', gutil.colors.green(config.isWatching))
+  cb()
 
-#gulp.task 'watch:jsx', ->
-#  $.watch config.src.jsx, ->
-#    gulp.start("compile:jsx")
+gulp.task 'watch:browserify', ['watch:set_watch', 'browserify']
+gulp.task 'watch:less',       ['watch:set_watch', 'compile:less']
+gulp.task 'watch:jade',       ['watch:set_watch', 'compile:jade']
+gulp.task 'watch:coffee',     ['watch:set_watch', 'compile:coffee']
+gulp.task 'watch:resource',   ['watch:set_watch', 'compile:resource']
+gulp.task 'watch:doc',        ['watch:set_watch', 'doc:generate']
 
-gulp.task 'watch:set_watch', ->
-  global.isWatching = true
+#gulp.task 'watch:test',        ['watch:set_watch', 'test']
+# task for test
+gulp.task 'watch:test', () ->
+  gulp.watch config.src.coffee, ['test']
 
-gulp.task 'watch:browserify', ->
-  gulp.start('browserify')
-
-gulp.task 'watch:less', ->
-  $.watch config.src.less, ->
-    gulp.start("compile:less")
-
-gulp.task 'watch:jade', ->
-  $.watch config.src.jade, ->
-    gulp.start("compile:jade")
-
-gulp.task 'watch:coffee', ->
-  $.watch config.src.coffee, ->
-    gulp.start('compile:coffee')
-
-gulp.task 'watch:doc', ->
-  $.watch config.doc.src, ->
-    gulp.start("doc")
-
-gulp.task 'watch', ['watch:set_watch', 'watch:coffee', 'watch:jade', 'watch:browserify', 'watch:less', 'watch:doc']
+gulp.task 'watch',
+    ['watch:set_watch', 'watch:coffee', 'watch:jade', 'watch:browserify', 'watch:less',
+     'watch:resource', 'compile:copy_bower_resource',
+     'watch:doc',
+     #'watch:test'
+    ]

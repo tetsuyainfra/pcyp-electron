@@ -14,10 +14,12 @@ module.exports = (options) ->
     if file.isNull()
       console.log('isnull')
     #   return cb(null, file)
-    if file.isBuffer()
+    else if file.isBuffer()
       gutil.log('processing ', gutil.colors.green(file.path))
+      # gutil.log('processing cwd', gutil.colors.green(file.cwd))
+      # gutil.log('processing base', gutil.colors.green(file.base))
 
-    if file.isStream()
+    else if file.isStream()
       gutil.log('processing ', gutil.colors.green(file.path))
       # return callback(new PluginError(PLUGIN_NAME, 'Stream is not supported'));
 

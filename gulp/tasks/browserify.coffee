@@ -7,21 +7,18 @@ babelify = require('babelify')
 watchify = require('watchify')
 envify   = require('envify/custom')
 
-handleErrors = require('../utils/handleErrors')
-bundleLogger = require('../utils/bundleLogger')
-nameLogger   = require('../utils/nameLogger')
+{ handleErrors, bundleLogger, nameLogger } = require('../utils')
 
 env  = require('../env')
-config = require('../config').browserify
 global_config = require('../config')
-debug = require('../debug')
+config = require('../config').browserify
 
 # Related to
 #https://github.com/callemall/material-ui/tree/master/examples/browserify-gulp-example
 
 
 # 主にjsxのコンパイル
-gulp.task 'browserify', (cb)->
+gulp.task 'browserify', ['clean:compile'],  (cb)->
   queueNum = config.bundleConfigs.length
 
   browserifyThis = (bundleConfig)->
@@ -29,7 +26,7 @@ gulp.task 'browserify', (cb)->
       cache: {}, packageCache: {}, fullPaths: false,
       entries: bundleConfig.entries,
       extensions: config.extensions,
-      debug: config.debug,
+      #debug: config.debug, # include sourcemap
       bundleExternal: ! config.debug
     })
 
@@ -58,7 +55,7 @@ gulp.task 'browserify', (cb)->
     )
     #.transform({global: true}, 'uglifyify')
 
-    if global.isWatching
+    if global_config.isWatching
       bundler.plugin(watchify)
       bundler.on('update', bundle)
 

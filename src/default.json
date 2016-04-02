@@ -16,7 +16,7 @@
     "port": "7144"
   },
   "player": {
-    "use_inner_player": false,
+    "use_inner_player": true,
     "user_players": [
       {
         "ext": "WMV",

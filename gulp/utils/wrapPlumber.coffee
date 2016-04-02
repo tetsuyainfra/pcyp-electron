@@ -17,6 +17,4 @@ wrapPlumber = ->
         })(err)
   })
 
-module.exports = {
-  wrapPlumber: wrapPlumber
-}
+module.exports = wrapPlumber
