@@ -1,4 +1,4 @@
-process.env.VLC_PLUGIN_PATH = require('wcjs-prebuilt').vlc_plugin_path
+#process.env.VLC_PLUGIN_PATH = require('wcjs-prebuilt').vlc_plugin_path
 
 electron      = require('electron')  # Module to control application life.
 app           = electron.app

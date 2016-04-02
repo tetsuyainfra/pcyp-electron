@@ -1,5 +1,8 @@
+#--------------------------------------------------
+#  entry point for electron main-process
+#--------------------------------------------------
+
 yargs         = require('yargs')
-PcypApp       = require('./pcyp-app')
 
 parseCommandLine = ->
   version = PcypApp.version
@@ -14,9 +17,6 @@ parseCommandLine = ->
   """
   options.count('verbose').alias('v', 'verbose')
   .describe('v', 'VERBOSE LEVEL -v warn, -vv info, -vvv debug, -vvvv trace')
-
-  options.alias('d', 'dev').boolean('d')
-  .describe('d', 'Run in development mode')
 
   options.alias('P', 'play').string('P')
   .describe('P', 'Run in Test Player mode')
@@ -36,5 +36,3 @@ parseCommandLine = ->
   {devMode}
 
 argv = parseCommandLine()
-
-pcyp_app = PcypApp.start(argv)

@@ -4,7 +4,6 @@ $    = require('gulp-load-plugins')()
 
 env  = require('../env')
 config = require('../config')
-moment = require('moment')
 
 gulp.task 'connect', ->
   # ブラウザプロセスでgcを晒す
