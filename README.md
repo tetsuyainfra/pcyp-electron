@@ -10,11 +10,8 @@ Peercast Yellow Pageを表示するためのクライアントです。
 
 ## How to development on win32
 ```cmd
-copy npmrc_windows .npmrc
-edit .npmrc       # たぶん何もする必要ないです
 npm install       
-bower install
-gulp compile
+npm build
 npm start
 ```
 
@@ -22,21 +19,20 @@ npm start
 ## How to scrap and build
 ```cmd
 # one console
-gulp watch
+npm watch
 
 # another console
-gulp connect
+#npm connect
 ```
 Note: src内のファイルを書き換えたら自動でコンパイルします。
 その後、必要に応じてelectronの再起動・ブラウザ画面のリロードを行います。
 
 
 ## 64bit対応について
-面倒なのでしばらくは32bitオンリーで開発していきます。
-
+うごくっぽい
 
 ## ソースコード
-基本的にはCoffeeScriptで書きます。そのうちTypeScriptに移行します。
+基本的にはCoffeeScript or ES2015で書きます。そのうち移行するかも。
 
 
 ## テスト
@@ -60,5 +56,5 @@ Note: src内のファイルを書き換えたら自動でコンパイルしま�
 
 ## 仕様ライブラリなど(予定含む)
 - React / Flux
-- WebChemera.js (の予定)
+- WebChemera.js
 - Three.js

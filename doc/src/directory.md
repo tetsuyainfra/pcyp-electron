@@ -24,3 +24,8 @@
     パッケージ情報
   - pcyp-electron_icon.ico  
     windows用アイコン
+- webpack.config.coffee Webpack標準でコンパイルされる設定
+    内部でwebpack.client, webpack.electronを読み込んでいる
+- webpack.client.coffee レンダラープロセスで実行するプログラムのWEBPACK設定
+- webpack.electron.coffee ブラウザープロセスで実行するプログラムのWEBPACK設定
+- webpack.dll.config.coffee レンダラープロセスで読み込むプログラムを一つにまとめるWEBPACK設定

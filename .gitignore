@@ -1,6 +1,7 @@
 ### Project
 tmp
 app
+dll
 build
 .npmrc
 doc/html
@@ -40,7 +41,7 @@ build/Release
 # https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
 node_modules
 
-# KEEP directory file 
+# KEEP directory file
 !.keep_dir
 
 ### Vim
