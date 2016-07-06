@@ -49,6 +49,7 @@
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.1.0",
     "reselect": "^2.5.3",
+    "three": "^0.78.0",
     "uikit": "^2.26.3",
     "wcjs-prebuilt": "3.0.0",
     "yargs": "^4.7.0"
