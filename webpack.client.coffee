@@ -1,10 +1,16 @@
 _       = require('lodash')
 path    = require('path')
 webpack = require('webpack')
-# HtmlWebpackPlugin = require('html-webpack-plugin')
+HtmlWebpackPlugin = require('html-webpack-plugin')
 ExtractTextPlugin = require('extract-text-webpack-plugin')
 CleanWebpackPlugin = require('clean-webpack-plugin')
 # AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin')
+
+parseDllManifest = (filename) ->
+  [name, hash] = require(filename).name.split('_')
+  # p = require.resolve("./app/dll/#{hash}/dll.#{name}.js")
+  p = require.resolve("./app/dll/dll.#{name}.js")
+  return path.relative('./app', p).split(path.sep).join('/')
 
 { SRC, APP } = require('./scripts/config.coffee')
 
@@ -31,6 +37,10 @@ module.exports = (options) ->
         root: path.join(__dirname, 'app')
         verbose: true
         dry: false
+      })
+      new HtmlWebpackPlugin({
+        template: path.join(SRC, '_index.jade')
+        dllPath: parseDllManifest('./dll/vendor-manifest.json')
       })
       new webpack.ProvidePlugin({
         $: "jquery",
@@ -73,7 +83,7 @@ module.exports = (options) ->
         }
         {
           test: /\.jade$/
-          loader: "jade?pretty=true"
+          loader: "jade-loader?pretty=true"
         }
         {
           test: /(\.scss|\.css)$/

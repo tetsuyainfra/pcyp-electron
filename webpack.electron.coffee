@@ -2,6 +2,7 @@ _       = require('lodash')
 path    = require('path')
 webpack = require('webpack')
 CleanWebpackPlugin = require('clean-webpack-plugin')
+CopyWebpackPlugin = require('copy-webpack-plugin')
 
 
 { SRC, APP } = require('./scripts/config.coffee')
@@ -30,6 +31,11 @@ module.exports = (options) ->
         root: path.join(__dirname, 'app')
         verbose: true
         dry: false
+      })
+      new CopyWebpackPlugin([{
+        from: path.join(SRC, "package.json")
+        to:   APP
+      }], {
       })
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(ENV)
