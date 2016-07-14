@@ -8,6 +8,7 @@
     "build:dll": "webpack --config webpack.dll.config.coffee",
     "build:webpack": "webpack --config webpack.config.coffee",
     "build": "npm-run-all -s build:dll build:webpack",
+    "package:win64": "electron-packager ./app electron-pcyp --platform=win32 --arch=x64 --out=dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -25,6 +26,7 @@
     "coffee-script": "1.10.0",
     "copy-webpack-plugin": "^3.0.1",
     "dom-helpers": "^2.4.0",
+    "electron-packager": "^7.3.0",
     "electron-prebuilt": "1.2.5",
     "extract-text-webpack-plugin": "^1.0.1",
     "html-webpack-plugin": "^2.22.0",

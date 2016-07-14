@@ -35,8 +35,7 @@ module.exports = (options) ->
       new CopyWebpackPlugin([{
         from: path.join(SRC, "package.json")
         to:   APP
-      }], {
-      })
+      }])
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(ENV)
         REVISION: JSON.stringify(REVISION)

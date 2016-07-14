@@ -18,6 +18,7 @@ module.exports = (options) ->
   { ENV, WATCH, SERVER_SIDE, REVISION } = options
   config = {
     name: "CLIENT_#{ENV}"
+    target: "electron-renderer"
     entry: {
       client: [
         path.join(SRC, 'client.es6')
@@ -46,6 +47,9 @@ module.exports = (options) ->
         $: "jquery",
         jQuery: 'jquery',
       })
+      new webpack.ExternalsPlugin('commonjs', [
+        "wcjs-prebuilt"
+      ])
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(ENV)
         REVISION:         JSON.stringify(REVISION)
@@ -96,6 +100,11 @@ module.exports = (options) ->
         /\.\/data\//, /\.\/nightwatch\//
       ]
     } # module
+    externals: [
+      {
+        # "wcjs-prebuilt": "wcjs-prebuilt"
+      }
+    ]
     resolve: {
       extensions: ['', '.js', '.es6', '.jsx']
       root: path.join(__dirname, 'src'),
